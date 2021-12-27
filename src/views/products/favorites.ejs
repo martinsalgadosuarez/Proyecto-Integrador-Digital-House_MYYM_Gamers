@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<%- include('../partials/head.ejs') %>
+
+    <body>
+
+        <!-- Comienzo de header -->
+        <%- include('../partials/header.ejs') %>
+            <!-- Fin del header -->
+
+            <div class="fav-container cart-page">
+                <div class="mi_carrito">
+                    <h3>Mis Favoritos</h3>                
+                        <% productsFavorites.forEach( product => { %>
+                    <form action="/favorites/deleteAll?_method=DELETE" method="POST">                       
+                        <% }) %>
+                        <% if (productsFavorites.length != 0) { %>
+                            <button type="submit" class="btn-vaciar">Vaciar Favoritos</button>                                      
+                    <% } else { %> 
+                        <button type="submit" class="btn-vaciar">Vaciar Favoritos</button> 
+                        <% } %>                     
+                    </form> 
+                </div>
+                <table class="favorites">
+                    <thead>
+                        <tr>
+                            <th class="favProduct">Producto</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% if (productsFavorites.length > 0) { %>
+                            <% productsFavorites.forEach( product => { %>                                
+                                <tr>
+                                   <td>
+                                       <div class="fav-info">
+                                           <a href="/detalleDelProducto/<%- product.id %>"> <img src="/img/Productos Gamers/<%- product.productimage[0]?.url %>" alt="<%- product.name %>" /></a>
+                                           <div>
+                                               <p>
+                                               <h4> <%- product.name%></h4>
+                                               </p>
+                                               <% if (product.discount !== 0) { %>
+                                                   <div class="withDiscount">
+                                                     <small>$<%- product.price %></small>
+                                                     <span>
+                                                       <%- product.discount !== 0 ? `${product.discount}% OFF` : '' %>
+                                                     </span>
+                                                     </div>
+                                                     <h3>$<%- toThousand(product.price - product.price * product.discount / 100) %>
+                                                     </h3>
+                                                   
+                                                   <% } else { %>
+                                                     <h3>
+                                                       $<%- toThousand(product.price) %>
+                                                     </h3>
+                             
+                                                     <% } %>
+                                            <br>
+                                            <form action="/favorites/deleteOne/<%- product.id %>?_method=DELETE" method="POST">
+                                                <button type="submit" id="<%- product.id %>" class="btnRemove"><i style="margin-right: 10px;" class="fas fa-trash"></i>Eliminar</a></button>
+                                            </form>
+                                               
+                                           </div>
+                                       </div>
+                                   </td>
+                               </tr>
+                                <% }) %> 
+                         
+                        <% } else { %>
+                            <tr>
+                                <td>
+                                    <div class="dBlock">
+                                    <h2 style="color: tomato; text-align: center;">
+                                        No hay productos en tu lista de favoritos
+                                    </h2>
+                                    <div style="height: 250px;"></div>
+                                </div> 
+                                </td>
+                               
+                            </tr>
+                                
+                            <% } %>
+                       
+                    </tbody>
+                    
+                </table>
+                <div class="jccenter">
+                    <div class="btn-seguirComprando">
+                    <a href="/"><button class="btn-seguirComprando">Seguir Comprando</button></a>
+                </div>
+                </div>
+                
+            </div>
+            <!-- Comienzo de footer -->
+            <%- include('../partials/footer.ejs') %>
+                <!-- Fin del footer -->
+
+    </body>
+
+</html>

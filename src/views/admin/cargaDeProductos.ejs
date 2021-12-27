@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<%- include('../partials/head.ejs') %>
+
+    <body>
+        <!-- header para el administrador -->
+        <%- include('../partials/header') %>
+
+            <main class="main-admin">
+                <form action="/admin/products/create" method="POST" enctype="multipart/form-data"
+                    id="fromCreateProduct">
+                    <div class="cargaDeFotos">
+                        <div class="volver">
+                            <a href="/admin/products">
+                                <i class="fas fa-arrow-left"></i>
+                            </a>
+                        </div>
+                        <div class="subirFoto">
+                            <div class="prevImage">
+                                <img id="imagenPrevisualizacion">
+                            </div>
+                            <div class="inputFile">
+                                <label for="seleccionArchivos">
+                                    <img src="/img/iconos-png/subirFoto.png" alt="" />
+                                </label>
+                                <input type="file" name="image" accept=".jpg, .png" multiple id="seleccionArchivos"
+                                    value="<%= locals.old && old.image %>" />
+                                    <% if (locals.errors && errors.image) { %>
+                                        <small class="text-danger"><%= errors.image.msg %> </small>
+                                    <% } %>
+                                    <small class="text-danger" id="fileErrors"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="charge">
+                        <h2>Agregar nuevo producto</h2>
+                        <div class="freight">
+                            <div class="formAdmin">
+                                <div class="flex">
+                                    <label for="name">Nombre del producto</label>
+                                    <div class="input">
+                                        <input type="text" placeholder="Computadora Gamer" id="name" name="name"
+                                            value="<%= locals.old && old.name %>" />
+                                        <small class="text-danger" id="nameErrors">
+                                        </small>
+                                        <% if (locals.errors && errors.name) { %>
+                                            <small class="text-danger" id="nameErrors">
+                                                <%= errors.name.msg %>
+                                            </small>
+                                            <% } %>
+                                    </div>
+
+                                    <label for="price">Precio del producto</label>
+                                    <div class="input">
+                                        <input type="number" min="0" placeholder="$00.00" id="price" name="price"
+                                            value="<%= locals.old && old.price %>" />
+                                        <small class="text-danger" id="priceErrors"></small>
+                                        <% if (locals.errors && errors.price) { %>
+                                            <small class="text-danger" id="priceErrors">
+                                                <%= errors.price.msg %>
+                                            </small>
+                                            <% } %>
+                                    </div>
+
+                                    <label for="discount">Descuento del producto</label>
+                                    <div class="input">
+                                        <input type="number" min="0" placeholder="20" id="discount" name="discount"
+                                            value="<%= locals.old && old.discount %>" />
+                                    </div>
+
+                                    <label for="mark">Marca</label>
+                                    <div class="input">
+                                        <select name="mark" id="mark">
+                                            <option value="" selected disabled>Marcas</option>
+                                            <% marks.forEach(mark=> { %>
+                                                <option value="<%- mark.id %>" <%=locals.old && old.mark==mark.id
+                                                    ? "selected" : null %> ><%- mark.name %>
+                                                </option>
+                                                <% }) %>
+
+                                        </select>
+                                        <small class="text-danger" id="markErrors"></small>
+                                        <% if(locals.errors && errors.mark) { %>
+                                            <small class="text-danger" id="markErrors">
+                                                <%= errors.mark.msg %>
+                                            </small>
+                                            <% } %>
+                                    </div>
+
+
+                                    <label for="mainFeatures">Características principales</label>
+                                    <div class="input">
+                                        <textarea name="mainFeatures" id="mainFeatures" cols="30" rows="10"
+                                            placeholder="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem repudiandae nam accusamus sint eum praesentium, necessitatibus explicabo. Magnam, ab omnis."><%= locals.old && old.mainFeatures %></textarea>
+                                        <small class="text-danger" id="mainFeaturesErrors"></small>
+                                        <% if(locals.errors && errors.mainFeatures) { %>
+                                            <small class="text-danger" id="mainFeaturesErrors">
+                                                <%= errors.mainFeatures.msg %>
+                                            </small>
+                                            <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="flex">
+
+                                    <label for="categoria-form">Categoría</label>
+                                    <div class="input">
+                                        <select name="categorie" id="categoria-form" class="categorySelect">
+                                            <option value="" selected disabled>Categorías</option>
+                                            <% locals.categories.forEach(category => { %>
+                                                <option value="<%- category.id %>" <%= locals.old && old.category == category.id ? "selected" : "" %> ><%- category.name %></option>
+                                             <% }) %>
+                                                                                               
+                                        </select>
+                                        <small class="text-danger" id="categoryErrors"></small>
+                                        <% if(locals.errors && errors.category) { %>
+                                            <small class="text-danger" id="categoryErrors">
+                                                <%= errors.category.msg %>
+                                            </small>
+                                            <% } %>
+                                    </div>
+
+                                    <label for="subCategoria-form">Subcategoría</label>
+                                    <div class="input">
+                                        <select name="subcategorie" id="subcategoria-form" class="subcategorySelect">
+                                            <option value="" selected disabled>Subcategorías</option>
+                                            
+                                                    
+                                        </select>
+                                        <% if(locals.errors && errors.subcategory) { %>
+                                            <small class="text-danger" id="subcategoryErrors">
+                                                <%= errors.subcategory.msg %>
+                                            </small>
+                                            <% } %>
+                                                <small class="text-danger" id="subcategoryErrors"></small>
+                                    </div>
+
+                                    <label for="codigo">Código de producto</label>
+                                    <div class="input">
+                                        <input type="number" min="0" placeholder="0000" id="codigo" name="barcode"
+                                            value="<%= locals.old && old.barcode %>" />
+
+                                            <% if(locals.errors && errors.barcode) { %>
+                                                <small class="text-danger" id="barcodeErrors">
+                                                    <%= errors.barcode.msg %>
+                                                </small>
+                                                <% } %>
+                                                    <small class="text-danger" id="barcodeErrors"></small>
+                                    </div>
+
+                                    <label for="stock">Stock</label>
+                                    <div class="input">
+                                        <input type="number" min="0" placeholder="0" id="stock" name="stock"
+                                            value="<%= locals.old && old.stock %>" />
+                                    </div>
+
+
+                                    <label for="description">Descripción del producto</label>
+                                    <div class="input">
+                                        <textarea name="description" id="description" cols="30" rows="10"
+                                            placeholder="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem repudiandae nam accusamus sint eum praesentium, necessitatibus explicabo. Magnam, ab omnis."><%= locals.old && old.description %></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <small class="text-danger" id="submitErrors"></small>
+                        <div class="btn-publish">
+                            <button class="publish" id="submitProduct" type="submit">Publicar producto</button>
+                        </div>
+
+                    </section>
+                </form>
+            </main>
+            <script src="/js/prevDeImg.js" defer></script>
+            <script src="/js/adminCategories.js" defer></script>
+            <script src="/js/validationsFront/cargaDeProductos.js"></script>
+    </body>
+
+</html>
